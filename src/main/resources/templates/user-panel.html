@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:ht
+                xmlns:sec>
+<head>
+    <meta charset="UTF-8">
+    <title>User panel</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/style.css">
+
+
+</head>
+<body>
+<div>
+    <div class="header-dark">
+        <div th:replace="header"></div>
+
+        <div class="container hero">
+            <div class="row">
+                <div class="col-md-10">
+                    <h2>Panel Użytkownika</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item">Nazwa użytkownika <b th:text="${user.name}"></b></li>
+                        <li class="list-group-item">Email <b th:text="${user.email}"></b></li>
+                    </ul>
+                    <ul class="list-group">
+                        <li class="list-group-item active">Ulubione</li>
+
+                        <li class="list-group-item" th:each="item : ${favoritesVessels}">
+                            MMSI <b th:text="${item.mmsi}"></b>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

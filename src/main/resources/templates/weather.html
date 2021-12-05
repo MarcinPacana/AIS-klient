@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Marine Radar</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+
+
+    <style>
+        /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+        .row.content {
+            height: 1500px
+        }
+
+        /* Set gray background color and 100% height */
+        .sidenav {
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+
+        /* On small screens, set height to 'auto' for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav {
+                height: auto;
+                padding: 15px;
+            }
+
+            .row.content {
+                height: auto;
+            }
+        }
+
+        #map {
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="header"></div>
+<!-- ----------------------------------- -->
+<div class="container-fluid">
+    <div class="row content">
+
+        <div class="col-sm-3 sidenav">
+        <div id="map"></div>
+        </div>
+        <!------------------------------------- -->
+        <div class="col-sm-9">
+            <div th:if="${weather != null}">
+                <h4>Aktualna pogoda dla: <b th:text="${weather.name}"></b></h4>
+                <div>
+                    <ul class="list-group">
+                        <li class="list-group-item active">Koordynanty</li>
+                        <li class="list-group-item">Długość geograficzna  <b th:text="${weather.coord.lon}"></b></li>
+                        <li class="list-group-item">Szerokość geograficzna  <b th:text="${weather.coord.lat}"></b></li>
+                    </ul>
+
+                    <ul class="list-group">
+                        <li class="list-group-item active">Pogoda</li>
+                        <li class="list-group-item" th:each="main : ${weather.weather}"><b th:text="${main.main}"></b>   <b th:text="${main.description}"></b></li>
+                        <li class="list-group-item">Widzialność <b th:text="${weather.visibility}"></b></li>
+                    </ul>
+
+                    <ul class="list-group">
+                        <li class="list-group-item active">Parametry</li>
+                        <li class="list-group-item">Temperatura <b th:text="${weather.main.temp}"></b></li>
+                        <li class="list-group-item">Temperatura odczuwalna  <b th:text="${weather.main.feelsLike}"></b></li>
+                        <li class="list-group-item">Temperatura minimalna  <b th:text="${weather.main.tempMin}"></b></li>
+                        <li class="list-group-item">Temperatura maksymalna  <b th:text="${weather.main.tempMax}"></b></li>
+                        <li class="list-group-item">Ciśnienie  <b th:text="${weather.main.pressure}"></b></li>
+                        <li class="list-group-item">Wilgotność  <b th:text="${weather.main.humidity}"></b></li>
+                    </ul>
+                    <ul class="list-group">
+                        <li class="list-group-item active">Wiatr</li>
+                        <li class="list-group-item">Kierunek  <b th:text="${weather.wind.deg}"></b></li>
+                        <li class="list-group-item">Prędkość <b th:text="${weather.wind.speed}"></b></li>
+                        <li class="list-group-item">Porywy  <b th:text="${weather.wind.gust}"></b></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div th:if="${weather == null}">
+                <h4>NIE ZNALEZIONO POGODY DLA WYBRANEGO MIEJSCA</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="container-fluid">
+    <p>Footer Text</p>
+</footer>
+<script th:inline="javascript">
+    var map = L.map('map').setView([51.505, -0.09], 10);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+</script>
+</body>
+</html>

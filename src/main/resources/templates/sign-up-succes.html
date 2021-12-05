@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:ht>
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/style.css">
+
+
+</head>
+<body>
+<div>
+    <div class="header-dark">
+        <div th:replace="header"></div>
+        <div class="container hero">
+            <div class="row">
+                <div class="col-md-10">
+                    <h2>Rejestracja zostałą zakończona pomyślnie</h2>
+                    <a th:href="@{/login_form}">Kliknij tutaj by się zalogować</a>
+                    <div class="embed-responsive embed-responsive-16by9"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

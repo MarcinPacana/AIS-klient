@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Marine Radar</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+
+
+    <style>
+        /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+        .row.content {height: 1500px}
+
+        /* Set gray background color and 100% height */
+        .sidenav {
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+
+        /* On small screens, set height to 'auto' for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav {
+                height: auto;
+                padding: 15px;
+            }
+            .row.content {height: auto;}
+        }
+
+        #map { height: 600px; }
+    </style>
+</head>
+<body>
+<div th:replace="header"></div>
+<!-- ----------------------------------- -->
+<div class="container-fluid">
+    <div class="row content">
+
+        <div class="col-sm-3 sidenav">
+            <h4>Wyszukaj statki w pobliżu:</h4>
+            <div class="input-group">
+
+                <form th:action="@{/indicated-place}" method="post">
+                    <input class="form-control" type="search" name="name" placeholder="szukaj">
+                </form>
+                <span class="input-group-btn">
+          <button class="btn btn-default" type="button">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </span>
+            </div>
+
+            <h4></h4>
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active"><a href="#section1">Szczegóły</a></li>
+                <li><a href="#section2">Nazwa statku:  <b id="ship-name"></b></a></li>
+                <li><a href="#section3">Rodzaj statku <b id="ship-type"></b> </a></li>
+                <li><a href="#section3">MMSI <b id="mmsi"></b></a></li>
+                <li><a href="#section3">Kraj <b id="country"></b></a></li>
+                <li><a class="btn-success"  role="button" th:href="@{/weather/place}">Sprawdź pogodę w miejscu docelowym</a></li>
+            </ul><br>
+
+        </div>
+
+        <!------------------------------------- -->
+
+        <div class="col-sm-9">
+            <h4><small>RECENT POSTS</small></h4>
+            <div id="map"></div>
+
+
+
+
+        </div>
+
+    </div>
+</div>
+
+<footer class="container-fluid">
+    <p>Footer Text</p>
+</footer>
+<script th:inline="javascript">
+
+    var map = L.map('map').setView([59.974453, 10.735043], 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var tracks = [[${tracks}]];
+    $(document).ready(function () {
+        var urlquery;
+        tracks.forEach(value => {
+            var polygon;
+            L.marker([value.x, value.y]).addTo(map)
+                .bindPopup(value.name + '</br>' + value.destinationName)
+                .openPopup()
+                .on('mouseover', () => {
+                    polygon = L.polygon([
+                        [value.x, value.y],
+                        [value.destinationX, value.destinationY]
+                    ]).addTo(map);
+                })
+                .on('mouseout', () => {
+                    map.removeLayer(polygon)
+                })
+                .on('click', () => {
+                    $("#ship-name")
+                        .html("<b>" + value.destinationName + "</b>");
+                    $("#ship-type")
+                        .html("<b>" + value.shipType + "<b>");
+                    $("#mmsi")
+                        .html("<b>" + value.mmsi + "<b>");
+                    $("#country")
+                        .html("<b>" + value.country + "<b>");
+                    var przycisk = document.getElementById("btn");
+                    przycisk.setAttribute("href", "/weather/" + value.destinationName);
+                })
+        })
+    })
+
+</script>
+</body>
+</html>

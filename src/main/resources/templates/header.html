@@ -1,0 +1,26 @@
+<nav class="navbar navbar-inverse" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" th:href="@{/}">Marine Radar</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a th:href="@{/}">Home</a></li>
+        </ul>
+        <form sec:authorize="isAuthenticated()" th:action="@{/user/search}" method="post" class="navbar-form navbar-left" >
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="nazwa/mmsi/imo" name="name">
+            </div>
+            <button type="submit" class="btn btn-default">Szukaj</button>
+        </form>
+
+        <ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">
+            <li><a th:href="@{/register}"><span class="glyphicon glyphicon-user"></span> Zarejestruj się</a></li>
+            <li><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span>  Zaloguj się</a></li>
+        </ul>
+
+        <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
+            <li><a th:href="@{/user/panel}"><span class="glyphicon glyphicon-user"></span><b th:text ="${#authentication.getPrincipal().getUser().getName()}"></b></a></li>
+            <li><a th:href="@{/logout}"><span class="glyphicon glyphicon-log-in"></span>Wyloguj się</a></li>
+        </ul>
+    </div>
+</nav>
