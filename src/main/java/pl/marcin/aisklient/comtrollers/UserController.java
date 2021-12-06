@@ -21,11 +21,7 @@ public class UserController {
     public String showUserPanel(Model model) {
         userService.getCurrentLoggedInUsser(model);
         model.addAttribute("model", model);
-        return "user-panel2";
+        return "user-panel";
     }
 
-    @GetMapping("/user/list_users")
-    public String getAllUsers() {
-        return "user-list";
-    }
 }

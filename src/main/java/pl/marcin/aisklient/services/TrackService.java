@@ -36,7 +36,6 @@ public class TrackService {
     public List<Point> getTracks(String place) {
         String link;
         if (place == null || getCoordinatesByPlace(place) == null) {
-            System.out.println("tworzy domyslny");
             link = createLink(URL_AIS_API, defaultCoordinates);
         } else {
             System.out.println("tworzy podany w zadaniu");
@@ -44,6 +43,7 @@ public class TrackService {
         }
 
         Ship[] element = getElement(link, Ship[].class);
+
         List<Point> pointList = mapToPoint(element);
         return pointList;
     }

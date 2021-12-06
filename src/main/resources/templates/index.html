@@ -75,7 +75,8 @@
                 <li><a href="#section3">Rodzaj statku <b id="ship-type"></b> </a></li>
                 <li><a href="#section3">MMSI <b id="mmsi"></b></a></li>
                 <li><a href="#section3">Kraj <b id="country"></b></a></li>
-                <li><a class="btn-success"  role="button" th:href="@{/weather/place}">Sprawdź pogodę w miejscu docelowym</a></li>
+                <li><a href="#section3">Port docelowy <b id="destinationName"></b></a></li>
+                <li><a class="btn-success"  role="button" href="" id="btn">Sprawdź pogodę w miejscu docelowym</a></li>
             </ul><br>
 
         </div>
@@ -124,13 +125,15 @@
                 })
                 .on('click', () => {
                     $("#ship-name")
-                        .html("<b>" + value.destinationName + "</b>");
+                        .html("<b>" + value.name + "</b>");
                     $("#ship-type")
                         .html("<b>" + value.shipType + "<b>");
                     $("#mmsi")
                         .html("<b>" + value.mmsi + "<b>");
                     $("#country")
                         .html("<b>" + value.country + "<b>");
+                    $("#destinationName")
+                        .html("<b>" + value.destinationName + "<b>");
                     var przycisk = document.getElementById("btn");
                     przycisk.setAttribute("href", "/weather/" + value.destinationName);
                 })

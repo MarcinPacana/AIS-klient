@@ -26,6 +26,7 @@ public class ShipController {
         System.out.println("parametr name: "+name);
         List<Vessel> vesselList = trackService.searchShip(name, true);
         model.addAttribute("vesselList",vesselList);
+        model.addAttribute("name",name);
         return "vessel-list";
     }
 
